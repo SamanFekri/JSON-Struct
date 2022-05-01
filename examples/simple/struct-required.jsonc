@@ -1,0 +1,19 @@
+{
+    "$schema": "https://github.com/SamanFekri/JSON-Struct",
+    "struct": {
+        "firstname": "string",
+        "lastname": "string",
+        "age": "int",
+        "address": {
+            "line1": "string",
+            "line2": "string",
+            "city": "string",
+            "country": "string"
+        },
+        "salary": "number", // in euros
+        "is_happy": "boolean",
+        "languages": ["string"],
+        "extra": "object",
+    },
+    "required": ["firstname", "address.country"] // they are required fields
+}

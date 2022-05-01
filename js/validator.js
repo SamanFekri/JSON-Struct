@@ -24,11 +24,27 @@ class JSONStruct {
     if(!this.getStruct()) {
       return undefined
     }
+    if(this.schema.required) {
+      if(typeof this.schema.required === "string") {
+        this.schema.required = [this.schema.required]
+      }
+      if(!Array.isArray(this.schema.required)) {
+        console.log(`required expected key or array of keys but get ${this.schema.required}`)
+      }
+    }
     return this
   }
   
   verify(data) {
     data = JSON.parse(JSON.stringify(data))
+    if(this.schema.required) {
+      for(let i =0; i < this.schema.required.length; i++) {
+        if(!this.dataHas(data, this.schema.required[i])) {
+          console.log(`${this.schema.required[i]} is required by the schema`)
+          return false
+        }
+      }
+    }
     if(!this.getStruct()) {
       return false
     }
@@ -113,6 +129,18 @@ class JSONStruct {
   
   getStruct() {
     return this.schema.struct;
+  }
+  
+  dataHas(data, key) {
+    let keyParts = key.split('.')
+    let item = data
+    for (let i=0; i<keyParts.length; i++) {
+      item = item[keyParts[i]]
+      if(!item) {
+        return false
+      }
+    }
+    return true
   }
   
 }
