@@ -6,7 +6,7 @@ This is a simple example of vocabulary
 
 
 `examples/simple/struct.jsonc`
-```jsonc
+```json5
 {
     "$schema": "https://github.com/SamanFekri/JSON-Struct",
     "struct": {
