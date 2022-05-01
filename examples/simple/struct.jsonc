@@ -10,8 +10,9 @@
             "city": "string",
             "country": "string"
         },
-        "salary": "float", // in euros
+        "salary": "number", // in euros
         "is_happy": "boolean",
-        "languages": ["string"]
+        "languages": ["string"],
+        "extra": "object",
     }
 }
