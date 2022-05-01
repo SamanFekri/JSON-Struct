@@ -33,6 +33,27 @@ Defining a field with multiple type.(exp. string and int)
 "id": "string|int"
 ```
 
+## Required
+You can use required fields as below
+```json5
+{
+    "$schema": "https://github.com/SamanFekri/JSON-Struct",
+    "struct": {
+        "firstname": "string",
+        // ...
+        "address": {
+            "line1": "string",
+            "line2": "string",
+            "city": "string",
+            "country": "string"
+        },
+        //...
+    },
+    "required": ["firstname", "address.country"] // firstname and address country arerequired
+}
+
+```
+
 # Types
 - Integer:`int`
 - Number: `number`
