@@ -1,0 +1,14 @@
+{
+    "firstname": "Saman",
+    "lastname": "Fekri",
+    "age": 26,
+    "address": {
+      "line1": "via turino",
+      "line2": "",
+      "city": "Milan",
+      "country": "Italy"
+    },
+    "salary": 550.50,
+    "is_happy": false,
+    "languages": ["Farsi", "English", "Italian"]
+}

@@ -1,19 +1,10 @@
-# JSON-Struct
-JSON Struct is a vocabulary that allows you to annotate and validate JSON documents.
-
-# Example
-This is a simple example of vocabulary
-
-
-`examples/simple/struct.jsonc`
-```json
 {
     "$schema": "https://github.com/SamanFekri/JSON-Struct",
     "struct": {
-        "firstname": "string", 
+        "firstname": "string",
         "lastname": "string",
         "age": "int",
-        "address": { 
+        "address": {
             "line1": "string",
             "line2": "string",
             "city": "string",
@@ -24,4 +15,3 @@ This is a simple example of vocabulary
         "languages": ["string"]
     }
 }
-```
