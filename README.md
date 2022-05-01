@@ -19,7 +19,7 @@ This is a simple example of vocabulary
             "city": "string",
             "country": "string"
         },
-        "salary": "float", // in euros
+        "salary": "number", // in euros
         "is_happy": "boolean",
         "languages": ["string"]
     }
