@@ -1,0 +1,10 @@
+{
+    "$schema": "https://github.com/SamanFekri/JSON-Struct",
+    "$id": "com.skings.address",
+    "struct": {
+        "line1": "string",
+        "line2": "string",
+        "city": "string",
+        "country": "string"
+    }
+}

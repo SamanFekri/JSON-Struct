@@ -3,7 +3,9 @@ import * as fs from 'fs';
 
 
 class JSONStruct {
-  schema = {}
+  schema = {
+    import: false
+  }
   BUILTIN_TYPES = {
     INT: "int",
     NUMBER: "number",
@@ -12,17 +14,35 @@ class JSONStruct {
     OBJECT: "object",
     ANY: "any"
   }
-  types = {
-    'builtin': Object.keys(this.BUILTIN_TYPES).map(key => this.BUILTIN_TYPES[key])
-  }
+  
+  importedTypes = new Set()
+  
+  types = {}
+  
   constructor() {
   }
   
-  loadFileSync(path, options= {encoding:'utf8', flag:'r'}) {
-    let text = fs.readFileSync( path, options)
+  loadFileSync(path, options= {encoding:'utf8', flag:'r'}, loadedTypes = new Set()) {
+    let text = fs.readFileSync(path, options)
     this.schema = JSON5.parse(text)
     if(!this.getStruct()) {
       return undefined
+    }
+    if(this.schema.import) {
+      if(!this.schema.$id) {
+        throw new Error("When you use import the schema must have id")
+      }
+      if(!loadedTypes.has(this.schema.$id)) {
+        Object.keys(this.schema.import).forEach(type => {
+          this.schema.import[type] = this.pathMerger(path.split('/').slice(0, -1).join('/'), this.schema.import[type])
+          console.log(this.schema.import[type])
+          this.importType(type, this.schema.import[type], options)
+          if(this.importedTypes.has(this.schema.$id)) {
+            throw new Error(`Found a recycled dependency ${type} and ${this.schema.$id}`)
+          }
+        })
+        this.importedTypes.add(this.schema.$id)
+      }
     }
     if(this.schema.required) {
       if(typeof this.schema.required === "string") {
@@ -98,6 +118,9 @@ class JSONStruct {
   
   verifyFiledByType(value, type) {
     if(!Array.isArray(value)) {
+      if(this.types[type]) {
+        return this.types[type].verify(value)
+      }
       switch (type) {
         case this.BUILTIN_TYPES.ANY:
           return true
@@ -141,6 +164,24 @@ class JSONStruct {
       }
     }
     return true
+  }
+  
+  importType(name, path, options) {
+    let json_schema = new JSONStruct()
+    json_schema.loadFileSync(path, options, this.importedTypes)
+    console.log(json_schema)
+    if(!json_schema.schema.$id) {
+      throw new Error(`Struct (${name})  imported in ${this.schema.$id}. so it must have an id`)
+    }
+    this.importedTypes.add(json_schema.importedTypes)
+    this.types[name] = json_schema
+  }
+  
+  pathMerger(path1, path2) {
+    if(path2.charAt(0) === '/') {
+      return path2
+    }
+    return `./${path1}/${path2}`
   }
   
 }

@@ -1,0 +1,17 @@
+{
+    "$schema": "https://github.com/SamanFekri/JSON-Struct",
+    "$id": "com.skings.personal",
+    "import": {
+        "address": "./struct-import-address.jsonc",
+    },
+    "struct": {
+        "firstname": "string",
+        "lastname": "string",
+        "age": "int",
+        "address": "address",
+        "salary": "number", // in euros
+        "is_happy": "boolean",
+        "languages": ["string"],
+        "extra": "object",
+    }
+}
