@@ -33,6 +33,43 @@ Defining a field with multiple type.(exp. string and int)
 "id": "string|int"
 ```
 
+## Custom types
+You can define custom types and import them into your json-struct.json
+
+Note: when you import a custom type both structs must have unique `$id`
+
+Here is the example `example/simple/struct-import-person.jsonc`
+```json5
+{
+    "$schema": "https://github.com/SamanFekri/JSON-Struct",
+    "$id": "com.skings.personal",
+    "import": {
+        "address": "./struct-import-address.jsonc",
+    },
+    "struct": {
+        "firstname": "string"
+        "address": "address", // the address is a custom type that we import
+    }
+}
+
+```
+
+`address` type defines here Here is the example `example/simple/struct-import-address.jsonc`:
+```json5
+{
+    "$schema": "https://github.com/SamanFekri/JSON-Struct",
+    "$id": "com.skings.address",
+    "struct": {
+        "line1": "string",
+        "line2": "string",
+        "city": "string",
+        "country": "string"
+    }
+}
+
+```
+
+
 ## Required
 You can use required fields as below
 ```json5
