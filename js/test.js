@@ -23,5 +23,9 @@ let  data = {
     "line1": false
 }
 }
-console.log(json_struct.verify(data))
+// let x = "address[0].line[1]"
+// console.log(x.match(/(?<=\[).+?(?=\])/g))
+// console.log("result: " , json_struct.getPrimitiveTypes("address.line1"));
+// console.log("result: " , json_struct.getPrimitiveTypes("extra"));
+console.log("result: " , json_struct.getPrimitiveTypes("languages[0]"));
 

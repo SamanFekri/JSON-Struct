@@ -15,6 +15,14 @@ class JSONStruct {
     ANY: "any"
   }
   
+  PRIMITIVE_TYPES = {
+    INT: "int",
+    NUMBER: "number",
+    STRING: "string",
+    BOOLEAN: "boolean",
+  }
+  PRIMITIVE_TYPES_ARRAY = Object.values(this.PRIMITIVE_TYPES)
+  
   importedTypes = new Set()
   
   types = {}
@@ -182,6 +190,50 @@ class JSONStruct {
       return path2
     }
     return `./${path1}/${path2}`
+  }
+  
+  getPrimitiveTypes(keyIdentifier) {
+    let insideBracketsREGEX = /(?<=\[).+?(?=\])/g
+    let struct = this.getStruct()
+    if(!struct) {
+      throw new Error("The Struct is not Defined")
+    }
+    let keyParts = keyIdentifier.split('.')
+    let subStruct = struct
+    for(let i = 0; i < keyParts.length; i++) {
+      let indexes = keyParts[i].match(insideBracketsREGEX)
+      if(!indexes) {
+        subStruct = subStruct[keyParts[i]]
+      } else {
+        subStruct = subStruct[keyParts[i].split('[')[0]]
+        indexes = indexes.map(index => parseInt(index.trim()))
+        try {
+          for (let j = 0; j < indexes.length; j++) {
+            subStruct = subStruct[indexes[j]]
+          }
+        } catch (e) {
+          console.log(e)
+          console.log(`${keyParts[i]} is not valid in the schema`)
+          return undefined
+        }
+      }
+      
+      if(typeof subStruct === 'string') {
+        return subStruct.split("|").map(type => {
+          type = type.trim()
+          if(this.PRIMITIVE_TYPES_ARRAY.includes(type)) {
+            return type
+          }
+          if(this.types[type]) {
+            return this.types[type].getPrimitiveTypes(keyParts.slice(i + 1).join("."))
+          }
+          console.log(`key: ${keyIdentifier} does not have a primitive type and have ${type} which is not supported as a primitive type`)
+          return undefined
+        }).filter(item => item !== undefined).flat()
+      }
+      
+      console.log(keyParts[i], subStruct)
+    }
   }
   
 }
